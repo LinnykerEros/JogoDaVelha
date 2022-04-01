@@ -29,7 +29,7 @@ document.addEventListener("click", (evento) => {
       jogarBot(evento.target.id, jogadorX);
       setTimeout(() => {
         bot();
-      }, 500);
+      }, 350);
     }
   }
 });
