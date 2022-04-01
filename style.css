@@ -44,6 +44,7 @@ h2 {
   text-align: center;
   background-color: cadetblue;
   background: hsl(268, 47%, 21%);
+  box-shadow: 1px 3px 2px hsl(176, 100%, 44%);
   color: hsl(176, 100%, 44%);
 }
 
