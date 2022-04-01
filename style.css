@@ -70,3 +70,12 @@ h2 {
 p {
   color: white;
 }
+
+#alertaJogueNovamente {
+  display: none;
+  color: white;
+  font-family: "Fredoka", sans-serif;
+  padding-bottom: 5px;
+  font-size: 12px;
+  text-align: center;
+}
