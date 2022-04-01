@@ -1,5 +1,6 @@
 const celulas = document.querySelectorAll(".celulas");
 let inputCheck = document.getElementById("inputCheck");
+let jogueNovamente = document.getElementById("alertaJogueNovamente");
 let checkTurno = true;
 let fimDeJogo = false;
 const jogadorX = "X";
@@ -39,7 +40,8 @@ function jogar(id) {
   const celula = document.getElementById(id);
 
   if (celula.textContent) {
-    return;
+     jogueNovamente.style.display = "block";
+    return (jogueNovamente.innerHTML = `Posição inválida, jogue novamente!`);
   }
   celula.style.transform = "scale(1.1)";
   //verifico qual o jogador que jogou, se foi o jogadorX ou jogadorO
@@ -132,6 +134,7 @@ function checkVencedor(turnoDoJogador) {
     encerraJogo();
   } else if (inputCheck.checked == false) {
     checkTurno = !checkTurno;
+     jogueNovamente.innerHTML = "";
   }
 }
 
