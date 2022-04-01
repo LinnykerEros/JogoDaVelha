@@ -8,8 +8,14 @@ body {
 
 h2 {
   margin-top: -5px;
+  font-size: 25px;
   text-align: center;
   color: white;
+}
+#cabecalho {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 .containerPaiDeTodos {
