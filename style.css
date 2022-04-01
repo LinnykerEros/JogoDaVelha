@@ -68,7 +68,7 @@ h2 {
   box-shadow: 1px 1px 2px hsl(177, 92%, 70%);
   width: 225px;
   font-family: "Fredoka", sans-serif;
-   margin-top: 5px;
+  margin-top: 6px;
 }
 
 .button:hover {
