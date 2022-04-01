@@ -1,4 +1,4 @@
-const linhas = document.querySelectorAll(".linhas");
+const celulas = document.querySelectorAll(".celulas");
 let inputCheck = document.getElementById("inputCheck");
 let checkTurno = true;
 let fimDeJogo = false;
@@ -16,34 +16,67 @@ const combinacoes = [
 ];
 
 document.addEventListener("click", (evento) => {
-  //se o clique for em "linhas"
-  if (evento.target.matches(".linhas")) {
+  //se o clique for em "celulas"
+
+  if (evento.target.matches(".celulas")) {
     //verifco se quero jogar contra o bot ou não
+
     if (inputCheck.checked == false) {
-      //passo o id da div "linhas" ex: linhas[0], linhas[1] para a função jogar;
+      //passo o id da div "celulas" ex: celulas[0], celulas[1] para a função jogar;
       jogar(evento.target.id);
     } else {
       jogarBot(evento.target.id, jogadorX);
       setTimeout(() => {
-        jogadorBot();
+        bot();
       }, 500);
     }
   }
 });
 
-function jogadorBot() {
+//função para jogar contra humano, onde preciso checkar qual o turno
+function jogar(id) {
+  // //pego o id da minha div "linhas"
+  const celula = document.getElementById(id);
+
+  if (celula.textContent) {
+    return;
+  }
+  celula.style.transform = "scale(1.1)";
+  //verifico qual o jogador que jogou, se foi o jogadorX ou jogadorO
+  turnoDoJogador = checkTurno ? jogadorX : jogadorO;
+  //faço minha div celula[id] receber o turno do jogador, escrevo na minha div X or O
+  celula.textContent = turnoDoJogador;
+  if (turnoDoJogador === jogadorO) {
+    celula.style.color = "hsl(52, 100%, 62%)";
+  }
+  //adiciono qual jogador jogou na class da minha div celula, ex:celulas O ou celulas X
+
+  if (
+    !celula.classList.contains(jogadorX) &&
+    !celula.classList.contains(jogadorO)
+  ) {
+    celula.classList.add(turnoDoJogador);
+  }
+
+  //passo para a minha função de checar o vencedor, o turno do jogador.
+  checkVencedor(turnoDoJogador);
+}
+//gerando uma posição aleatoria onde o bot vai jogar
+function bot() {
   let posicoesDisp = [];
-  //percorro as linhas na minha grid
-  for (index in linhas) {
+  let i = 0;
+  //percorro as celulas na minha grid
+  for (i in celulas) {
     //verifico se index é número
-    if (!isNaN(index)) {
+    if (!isNaN(i)) {
       //se for um número, verifico se minha linha com id tal, já está preenchida com X or O
+
       if (
-        !linhas[index].classList.contains(jogadorX) &&
-        !linhas[index].classList.contains(jogadorO)
+        !celulas[i].classList.contains(jogadorX) &&
+        !celulas[i].classList.contains(jogadorO)
       ) {
         //coloco na minha lista as posições disponiveis
-        posicoesDisp.push(index);
+        posicoesDisp.push(i);
       }
     }
   }
@@ -55,44 +88,33 @@ function jogadorBot() {
     jogarBot(posicoesDisp[posicaoAleatoria], jogadorO);
   }
 }
-
-//função para jogar contra humano, onde preciso checkar qual o turno
-function jogar(id) {
-  //pego o id da minha div "linhas"
-  const linha = document.getElementById(id);
-
-  linha.style.transform = "scale(1.1)";
-
-  //verifico qual o jogador que jogou, se foi o jogadorX ou jogadorO
-  turnoDoJogador = checkTurno ? jogadorX : jogadorO;
-
-  //faço minha div linha[id] receber o turno do jogador, escrevo na minha div X or O
-  linha.innerHTML = turnoDoJogador;
-
-  if (turnoDoJogador == jogadorO) {
-    linha.style.color = "hsl(52, 100%, 62%)";
-  }
-  //adiciono qual jogador jogou na class da minha div linha, ex:linhas O ou linhas X
-  linha.classList.add(turnoDoJogador);
-  //passo para a minha função de checar o vencedor, o turno do jogador.
-  checkVencedor(turnoDoJogador);
-}
 //função para jogar contra o bot, não preciso checkar o turno já que está jogando contra bot.
-function jogarBot(id, turnoDoJogador) {
+function jogarBot(id, turno) {
   //pego o id da minha div "linhas"
-  console.log(`>>>>> ${turnoDoJogador}`);
-  const linha = document.getElementById(id);
-  //criando uma elevação no meu botão quando ele é clicado.
-  linha.style.transform = "scale(1.1)";
-  //faço minha div linha[id] receber o turno do jogador, escrevo na minha div X or O
-  linha.innerHTML = turnoDoJogador;
-  if (turnoDoJogador == jogadorO) {
-    linha.style.color = "hsl(52, 100%, 62%)";
+  const celulaBot = document.getElementById(id);
+
+  if (celulaBot.textContent) {
+    return;
   }
-  //adiciono qual jogador jogou na class da minha div linha, ex:linhas O ou linhas X
-  linha.classList.add(turnoDoJogador);
+  //criando uma elevação no meu botão quando ele é clicado.
+  celulaBot.style.transform = "scale(1.1)";
+
+  celulaBot.textContent = turno;
+
+  //setando uma cor para minha celula O
+  if (turno == jogadorO) {
+    celulaBot.style.color = "hsl(52, 100%, 62%)";
+  }
+  //adiciono qual jogador jogou na class da minha div celulaBot, ex:celulaBots O ou celulaBots X
+  if (
+    !celulaBot.classList.contains(jogadorX) &&
+    !celulaBot.classList.contains(jogadorO)
+  ) {
+    celulaBot.classList.add(turno);
+  }
+
   //passo para a minha função de checar o vencedor, o turno do jogador.
-  checkVencedor(turnoDoJogador);
+  checkVencedor(turno);
 }
 
 function checkVencedor(turnoDoJogador) {
@@ -100,10 +122,9 @@ function checkVencedor(turnoDoJogador) {
   const vencedor = combinacoes.some((combinacao) => {
     //com o "every" estou verificando se o que está preenchido retornam o mesmo turnoJogador ex: X X X or O O O
     return combinacao.every((index) => {
-      return linhas[index].classList.contains(turnoDoJogador);
+      return celulas[index].classList.contains(turnoDoJogador);
     });
   });
-  console.log(vencedor);
   //verifico se ganhou ou não, se vencedor == true, ganhou, ai encerra o jogo.
   if (vencedor == true) {
     encerraJogo(turnoDoJogador);
@@ -139,15 +160,15 @@ function encerraJogo(vencedor = null) {
 function checkEmpate() {
   let x = 0;
   let o = 0;
-  for (index in linhas) {
+  for (index in celulas) {
     //verifico se index é um número
     if (!isNaN(index)) {
       //se for um número, verifico se minha linha com id tal contém X
-      if (linhas[index].classList.contains(jogadorX)) {
+      if (celulas[index].classList.contains(jogadorX)) {
         x++;
       }
       //se for um número, verifico se minha linha com id tal contém O
-      if (linhas[index].classList.contains(jogadorO)) {
+      if (celulas[index].classList.contains(jogadorO)) {
         o++;
       }
     }
@@ -159,4 +180,3 @@ function checkEmpate() {
 function resetar() {
   location.reload();
 }
-
